@@ -1,13 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Select DOM elements
   const addButton = document.getElementById("add-task-btn");
   const taskInput = document.getElementById("task-input");
   const taskList = document.getElementById("task-list");
 
-  // Load tasks from Local Storage on page load
   loadTasks();
 
-  // Add task when button is clicked
   addButton.addEventListener("click", () => {
     const taskText = taskInput.value.trim();
     if (taskText !== "") {
@@ -18,7 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Add task when Enter key is pressed
   taskInput.addEventListener("keypress", (event) => {
     if (event.key === "Enter") {
       const taskText = taskInput.value.trim();
@@ -31,16 +27,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Function to add a task to the DOM and optionally save to Local Storage
   function addTask(taskText, save = true) {
     const listItem = document.createElement("li");
     listItem.textContent = taskText;
+
+    // ✅ Add a class to the task item
+    listItem.classList.add("task-item");
 
     const removeButton = document.createElement("button");
     removeButton.textContent = "Remove";
     removeButton.className = "remove-btn";
 
-    // Remove task from DOM and Local Storage
     removeButton.onclick = () => {
       taskList.removeChild(listItem);
       removeTaskFromStorage(taskText);
@@ -49,7 +46,6 @@ document.addEventListener("DOMContentLoaded", () => {
     listItem.appendChild(removeButton);
     taskList.appendChild(listItem);
 
-    // Save task to Local Storage
     if (save) {
       const storedTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
       storedTasks.push(taskText);
@@ -57,14 +53,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Function to remove a task from Local Storage
   function removeTaskFromStorage(taskText) {
     const storedTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
     const updatedTasks = storedTasks.filter((task) => task !== taskText);
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
   }
 
-  // Function to load tasks from Local Storage
   function loadTasks() {
     const storedTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
     storedTasks.forEach((taskText) => addTask(taskText, false));
